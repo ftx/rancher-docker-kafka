@@ -9,7 +9,7 @@ ENV ZOOKEEPER_HOST localhost
 
 # Install Kafka and other needed things
 RUN apt-get update && \
-    apt-get install -y zookeeper wget supervisor dnsutils && \
+    apt-get install -y zookeeper wget supervisor dnsutils vim perl && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
     wget -q http://apache.mirrors.spacedump.net/kafka/"$KAFKA_VERSION"/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION".tgz -O /tmp/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION".tgz && \
@@ -17,6 +17,7 @@ RUN apt-get update && \
     rm /tmp/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION".tgz
 
 ADD scripts/start-kafka.sh /usr/bin/start-kafka.sh
+RUN chmod +x /usr/bin/start-kafka.sh;
 
 # Supervisor config
 ADD supervisor/kafka.conf /etc/supervisor/conf.d/

@@ -1,6 +1,5 @@
-#!/bin/sh
+#!/bin/bash
 
-# Optional ENV variables:
 # * ADVERTISED_HOST: the external ip for the container, e.g. `docker-machine ip \`docker-machine active\``
 # * ADVERTISED_PORT: the external port for Kafka, e.g. 9092
 # * ZK_CHROOT: the zookeeper chroot that's used by Kafka (without / prefix), e.g. "kafka"
@@ -31,7 +30,7 @@ fi
    	ZOOKEEPER_HOST=${ZOOKEEPER_HOST}
     fi
 
-    sed -r -i "s/(zookeeper.connect)=(.*)/\1=localhost:2181\/$ZOOKEEPER_HOST:2181/g" $KAFKA_HOME/config/server.properties
+perl -p -i -e "s/zookeeper.connect=localhost:2181/zookeeper.connect=${ZOOKEEPER_HOST}:2181/g" $KAFKA_HOME/config/server.properties
 
 
 # Allow specification of log retention policies
@@ -59,7 +58,8 @@ fi
 # Random ID For cluster
 ID=$(echo $(($RANDOM % 100)))
 
-sed -r -i "s/broker.id=0/broker.id=$ID/g" $KAFKA_HOME/config/server.properties
+perl -p -i -e "s/broker.id=0/broker.id=${ID}/g" $KAFKA_HOME/config/server.properties
+
 
 
 # Run Kafka
